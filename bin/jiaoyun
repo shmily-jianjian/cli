@@ -1,0 +1,45 @@
+#! /usr/bin/env node
+const { program } = require('commander');
+const chalk = require('chalk')
+
+// 介绍脚手架
+program
+  .name('jiaoyun-cli')
+  .description('智能交运业务部前端脚手架')
+  .version('jiaoyun-cli ' + require('../package.json').version)
+
+// 创建项目 => 命名重复怎么办
+program
+  .command('create')
+  .argument('<name>', '需要创建的项目名称')
+  .description('创建一个前端项目')
+  .option('-f, --force', '是否覆盖已经存在的项目')
+  .action((name, cmd) => {
+    require('../lib/create')(name, cmd)
+  })
+
+// 可以修改配置文件
+// jiaoyun config --set a 1 => name:1 cmd: {set: name}
+// jiaoyun config --get a
+program
+  .command('config')
+  // <name> 表示必填项  [name] 表示选填
+  .argument('[name]', '需要配置的变量名称')
+  .description('修改默认配置文件')
+  .option('-s, --set <path> <value>', '设置某个变量')
+  .option('-d, --delte <path>', '删除某个变量')
+  .option('-g, --get <path>', '获取某个变量值')
+  .action((name, cmd) => {
+    console.log(name);
+    console.log(cmd);
+  })
+
+
+// 用户输入 jiaoyun --help 提示用户可以干嘛
+program.on('--help', () => {
+  console.log();
+  console.log( chalk.green('你可以输入 jiaoyun <command> --help 查看更具体的用法'))
+  console.log();
+})
+
+program.parse()
